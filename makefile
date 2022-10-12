@@ -23,7 +23,16 @@ setup:
 	@$(SED_I)  "s/<UID>/$(UID)/" Dockerfile
 	@$(SED_I)  "s/<GID>/$(GID)/" Dockerfile
 	@mkdir wordpress
+
+increase-uploadFile:
+	echo "php_value upload_max_filesize 64M" >> wordpress/.htaccess
+	echo "php_value post_max_size 128M" >> wordpress/.htaccess
+	echo "php_value memory_limit 256M" >> wordpress/.htaccess
+	echo "php_value max_execution_time 300" >> wordpress/.htaccess
+	echo "php_value max_input_time 300" >> wordpress/.htaccess
+
 build:
 	docker-compose up -d --build
+	make increase-uploadFile
 run:
 	docker-compose up -d
